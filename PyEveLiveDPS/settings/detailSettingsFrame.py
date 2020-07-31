@@ -7,14 +7,14 @@ import tkinter.font as tkFont
 from peld import settings
 
 class DetailSettingsFrame(tk.Frame):
-    text = {"dpsOut": "DPS Out",
-            "dpsIn": "DPS In",
-            "logiOut": "Logi Out",
-            "logiIn": "Logi In",
-            "capTransfered": "Cap Out",
-            "capRecieved": "Cap In",
-            "capDamageOut": "Cap Dmg Out",
-            "capDamageIn": "Cap Dmg In"}
+    text = {"dpsOut": "DPS输出量",
+            "dpsIn": "DPS遭受量",
+            "logiOut": "遥修输出量",
+            "logiIn": "遥修接收量",
+            "capTransfered": "电容转移量",
+            "capRecieved": "电容接收量",
+            "capDamageOut": "电容吸收/中和输出量",
+            "capDamageIn": "电容吸收/中和遭受量"}
     def __init__(self, parent, mainWindow, **kwargs):
         tk.Frame.__init__(self, parent, **kwargs)
         self.parent = parent
@@ -25,7 +25,7 @@ class DetailSettingsFrame(tk.Frame):
         
         checkboxValue = tk.BooleanVar()
         checkboxValue.set(settings.detailsWindowShow)
-        self.windowDisabled = tk.Checkbutton(self, text="Show Pilot Breakdown window", variable=checkboxValue)
+        self.windowDisabled = tk.Checkbutton(self, text="按飞行员显示", variable=checkboxValue)
         self.windowDisabled.var = checkboxValue
         self.windowDisabled.grid(row="1", column="1", columnspan="2")
         
@@ -34,8 +34,8 @@ class DetailSettingsFrame(tk.Frame):
         self.makeListBox()
         
     def makeListBox(self):
-        tk.Label(self, text="Order priority for pilots and weapons in the breakdown").grid(row="3", column="1")
-        descriptor = tk.Label(self, text="drag and drop entries to order them")
+        tk.Label(self, text="在\"按飞行员显示\"中，将飞行员与武器按优先级排序").grid(row="3", column="1")
+        descriptor = tk.Label(self, text="拖拽来改变优先级排序")
         font = tkFont.Font(font=descriptor['font'])
         font.config(slant='italic')
         descriptor['font'] = font

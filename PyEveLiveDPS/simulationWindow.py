@@ -13,7 +13,7 @@ class SimulationWindow(tk.Toplevel):
         self.values = {}
         
         self.wm_attributes("-topmost", True)
-        self.wm_title("PyEveLiveDPS Simulation Settings")
+        self.wm_title("PyEveLiveDPS 模拟设置")
         try:
             self.iconbitmap(sys._MEIPASS + '\\app.ico')
         except Exception:
@@ -21,12 +21,12 @@ class SimulationWindow(tk.Toplevel):
                 self.iconbitmap("app.ico")
             except Exception:
                 pass
-        self.geometry("300x120")
+        self.geometry("400x120")
         self.update_idletasks()
         
         self.columnconfigure(0, weight=1)
         
-        tk.Label(self, text="For each item, a random number will be chosen\n in the range you specify every cycle.").grid(row="0", column="0", columnspan="10")
+        tk.Label(self, text="在每一轮中，每一项都会产生一个在你指定范围内的随机数。").grid(row="0", column="0", columnspan="10")
         
         tk.Frame(self, height="20", width="1").grid(row="1", column="1", columnspan="5")
         
@@ -34,41 +34,41 @@ class SimulationWindow(tk.Toplevel):
         self.innerFrame.grid(row="2", column="0")
         
         if settings.getDpsOutSettings():
-            tk.Label(self.innerFrame, text="DPS Out:").grid(row="2", column="0", sticky="e")
+            tk.Label(self.innerFrame, text="DPS输出量：").grid(row="2", column="0", sticky="e")
             self.addRow("dpsOut", "2")
         if settings.getLogiOutSettings():
-            tk.Label(self.innerFrame, text="Logistics Out:").grid(row="3", column="0", sticky="e")
+            tk.Label(self.innerFrame, text="遥修输出量：").grid(row="3", column="0", sticky="e")
             self.addRow("logiOut", "3")
         if settings.getCapTransferedSettings():
-            tk.Label(self.innerFrame, text="Cap Transfer Out:").grid(row="4", column="0", sticky="e")
+            tk.Label(self.innerFrame, text="电容转移量：").grid(row="4", column="0", sticky="e")
             self.addRow("capOut", "4")
         if settings.getCapDamageOutSettings():
-            tk.Label(self.innerFrame, text="Cap Warfare Out:").grid(row="5", column="0", sticky="e")
+            tk.Label(self.innerFrame, text="电容吸收/中和输出量：").grid(row="5", column="0", sticky="e")
             self.addRow("neutOut", "5")
         if settings.getDpsInSettings():
-            tk.Label(self.innerFrame, text="DPS In:").grid(row="6", column="0", sticky="e")
+            tk.Label(self.innerFrame, text="DPS遭受量：").grid(row="6", column="0", sticky="e")
             self.addRow("dpsIn", "6")
         if settings.getLogiInSettings():
-            tk.Label(self.innerFrame, text="Logistics In:").grid(row="7", column="0", sticky="e")
+            tk.Label(self.innerFrame, text="遥修接收量：").grid(row="7", column="0", sticky="e")
             self.addRow("logiIn", "7")
         if settings.getCapRecievedSettings():
-            tk.Label(self.innerFrame, text="Cap Transfer In:").grid(row="8", column="0", sticky="e")
+            tk.Label(self.innerFrame, text="电容接收量：").grid(row="8", column="0", sticky="e")
             self.addRow("capIn", "8")
         if settings.getCapDamageInSettings():
-            tk.Label(self.innerFrame, text="Cap Warfare In:").grid(row="9", column="0", sticky="e")
+            tk.Label(self.innerFrame, text="电容吸收/中和遭受量：").grid(row="9", column="0", sticky="e")
             self.addRow("neutIn", "9")
         if settings.getMiningSettings():
-            tk.Label(self.innerFrame, text="Mining:").grid(row="10", column="0", sticky="e")
+            tk.Label(self.innerFrame, text="采矿量：").grid(row="10", column="0", sticky="e")
             self.addRow("mining", "10")
         
         tk.Frame(self, height="20", width="1").grid(row="99", column="1", columnspan="5")
         
         buttonFrame = tk.Frame(self)
         buttonFrame.grid(row="100", column="0", columnspan="10")
-        okButton = tk.Button(buttonFrame, text="  Run  ", command=self.doSimulation)
+        okButton = tk.Button(buttonFrame, text="  模拟  ", command=self.doSimulation)
         okButton.grid(row="0", column="0")
         tk.Frame(buttonFrame, height="1", width="30").grid(row="0", column="1")
-        cancelButton = tk.Button(buttonFrame, text="  Cancel  ", command=self.destroy)
+        cancelButton = tk.Button(buttonFrame, text="  取消  ", command=self.destroy)
         cancelButton.grid(row="0", column="2")
         
     def addRow(self, prefix, row):
@@ -80,11 +80,11 @@ class SimulationWindow(tk.Toplevel):
         self.values[prefix]["ceiling"] = tk.Entry(self.innerFrame, width=7)
         self.values[prefix]["ceiling"].grid(row=row, column="3")
         self.values[prefix]["ceiling"].insert(0, "100")
-        tk.Label(self.innerFrame, text="  every").grid(row=row, column="4")
+        tk.Label(self.innerFrame, text="  每").grid(row=row, column="4")
         self.values[prefix]["cycle"] = tk.Entry(self.innerFrame, width=4)
         self.values[prefix]["cycle"].grid(row=row, column="5")
         self.values[prefix]["cycle"].insert(0, "3")
-        tk.Label(self.innerFrame, text="s  ").grid(row=row, column="6")
+        tk.Label(self.innerFrame, text="秒  ").grid(row=row, column="6")
         self.geometry("%sx%s" % (self.winfo_width(), self.winfo_height()+20))
         self.update_idletasks()
         
@@ -101,20 +101,20 @@ class SimulationWindow(tk.Toplevel):
                 value["ceiling"] = int(value["ceiling"])
                 value["cycle"] = int(value["cycle"])
                 if not (value["cycle"] > 0):
-                    tk.messagebox.showerror("Error", "Value for seconds must be greater than 0")
+                    tk.messagebox.showerror("错误", "每一轮的时间必须大于0。")
                     return
                 if (value["floor"] < 0) or (value["ceiling"] < 0):
-                    tk.messagebox.showerror("Error", "Value for ranges must not be negative")
+                    tk.messagebox.showerror("错误", "随机数的范围不应是负数。")
                     return
             except ValueError:
-                tk.messagebox.showerror("Error", "Please enter only whole, positive numbers for all values")
+                tk.messagebox.showerror("错误", "请输入正整数。")
                 return
         
         self.mainWindow.mainMenu.menu.delete(7)
-        self.mainWindow.mainMenu.menu.insert_command(7, label="Stop Simulation", command=self.stopSimulation)
+        self.mainWindow.mainMenu.menu.insert_command(7, label="停止模拟", command=self.stopSimulation)
         self.mainWindow.mainMenu.menu.entryconfig(5, state="disabled")
         
-        self.mainWindow.topLabel.configure(text="Simulation Mode")
+        self.mainWindow.topLabel.configure(text="模拟模式")
         self.mainWindow.topLabel.grid()
         
         self.mainWindow.characterDetector.catchupLog()

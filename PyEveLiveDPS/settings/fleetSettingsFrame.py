@@ -17,11 +17,11 @@ class FleetSettingsFrame(tk.Frame):
 
         self.row = 1
         
-        self.windowDisabled = self.makeCheckbox(settings.fleetWindowShow, "Show Fleet Window", "Fleet Window is only available when PELD is in Fleet Mode")
-        self.aggregateGraph = self.makeCheckbox(settings.fleetWindowShowAggregate, "Show Aggregate Stats Graph")
-        self.dpsOutGraph = self.makeCheckbox(settings.fleetWindowShowDpsOut, "Show Top 3 DPS Out Graph")
-        self.dpsInGrpah = self.makeCheckbox(settings.fleetWindowShowDpsIn, "Show Top 3 DPS In Graph")
-        self.logiOutGraph = self.makeCheckbox(settings.fleetWindowShowLogiOut, "Show Top 3 Logi Out Graph")
+        self.windowDisabled = self.makeCheckbox(settings.fleetWindowShow, "显示舰队窗口", "仅当PLED在舰队模式中，舰队窗口才生效")
+        self.aggregateGraph = self.makeCheckbox(settings.fleetWindowShowAggregate, "显示总计图表")
+        self.dpsOutGraph = self.makeCheckbox(settings.fleetWindowShowDpsOut, "显示前3名DPS输出的图表")
+        self.dpsInGrpah = self.makeCheckbox(settings.fleetWindowShowDpsIn, "显示前3名DPS遭受的图表")
+        self.logiOutGraph = self.makeCheckbox(settings.fleetWindowShowLogiOut, "显示前3名遥修输出的图表")
 
     def makeCheckbox(self, initValue, boxText, description=None):
         checkboxValue = tk.BooleanVar()

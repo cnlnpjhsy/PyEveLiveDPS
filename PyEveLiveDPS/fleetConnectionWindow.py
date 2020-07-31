@@ -19,7 +19,7 @@ class FleetWindow(tk.Toplevel):
         characterEntries = mainWindow.characterDetector.menuEntries
         if len(characterEntries) == 0:
             self.destroy()
-            tk.messagebox.showerror("Error", "PELD must be tracking a character before enabling fleet mode.")
+            tk.messagebox.showerror("错误", "必须先追踪一个人物的数据才能开启舰队模式。")
             return
         characterIndex = mainWindow.characterDetector.selectedIndex.get()
         self.characterName = characterEntries[characterIndex]
@@ -29,7 +29,7 @@ class FleetWindow(tk.Toplevel):
         self.configure(pady=10)
         
         self.wm_attributes("-topmost", True)
-        self.wm_title("PyEveLiveDPS Fleet Mode")
+        self.wm_title("PyEveLiveDPS 舰队模式")
         try:
             self.iconbitmap(sys._MEIPASS + '\\app.ico')
         except Exception:
@@ -41,14 +41,15 @@ class FleetWindow(tk.Toplevel):
         self.update_idletasks()
         
         characterFrame = tk.Frame(self)
-        tk.Label(characterFrame, text="Character to use for fleet mode: ").grid(row="0", column="1", sticky="w")
+        tk.Label(characterFrame, text="用于舰队模式的人物：").grid(row="0", column="1", sticky="w")
         nameLabel = tk.Label(characterFrame, text=self.characterName)
         font = tkFont.Font(font=nameLabel['font'])
         font.config(weight='bold')
         nameLabel['font'] = font
         nameLabel.grid(row="0", column="2", sticky="w")
-        nameDescription = tk.Label(self, text="To use a different character for fleet mode, choose a different\n" +
-                            " character in the 'Character...' menu on the main window")
+        nameDescription = tk.Label(self, text="若想更改用于舰队模式的人物，" +
+                            "请在主窗口中的\"人物\"菜单中选择。\n" + 
+                            "注意：晨曦服无法使用舰队模式")
         font = tkFont.Font(font=nameDescription['font'])
         font.config(slant='italic')
         nameDescription['font'] = font
@@ -59,23 +60,23 @@ class FleetWindow(tk.Toplevel):
         
         self.serverVar = tk.StringVar()
         self.serverVar.set(settings.fleetServer)
-        self.addEntrySetting(self.serverVar, "Server to use: ", 
-                        "Don't change this unless your FC tells you to")
+        self.addEntrySetting(self.serverVar, "使用的服务器：", 
+                        "一般无需更改，除非FC要求使用其他服务器")
         
         self.modeVar = tk.IntVar()
         self.modeVar.set(1)
-        tk.Radiobutton(self, text="Fleet Member", variable=self.modeVar, value=1).grid(row=self.counter, column="1", sticky="w")
+        tk.Radiobutton(self, text="我是舰队成员", variable=self.modeVar, value=1).grid(row=self.counter, column="1", sticky="w")
         self.counter += 1
-        tk.Radiobutton(self, text="FC (requires fleet boss)", variable=self.modeVar, value=2).grid(row=self.counter, column="1", sticky="w")
+        tk.Radiobutton(self, text="我是FC（需要是舰队统率）", variable=self.modeVar, value=2).grid(row=self.counter, column="1", sticky="w")
         self.counter += 1
         tk.Frame(self, height="10", width="10").grid(row=self.counter, column="1", columnspan="5")
         self.counter += 1
         
         self.lowCPUVar = tk.BooleanVar()
         self.lowCPUVar.set(False)
-        lowCPUCheckbutton = tk.Checkbutton(self, text="Use low CPU mode", variable=self.lowCPUVar)
+        lowCPUCheckbutton = tk.Checkbutton(self, text="低CPU占用模式", variable=self.lowCPUVar)
         lowCPUCheckbutton.grid(row=self.counter, column="1", columnspan="2", sticky="w")
-        descriptor = tk.Label(self, text="Most features will be disabled, but networking will work normally")
+        descriptor = tk.Label(self, text="大多数功能会被禁用，但仍保持舰队联网")
         font = tkFont.Font(font=descriptor['font'])
         font.config(slant='italic')
         descriptor['font'] = font
@@ -87,14 +88,14 @@ class FleetWindow(tk.Toplevel):
         
         buttonFrame = tk.Frame(self)
         buttonFrame.grid(row="100", column="0", columnspan="10")
-        self.loginButton = tk.Button(buttonFrame, text="  Login  ", command=self.login)
+        self.loginButton = tk.Button(buttonFrame, text="  登录  ", command=self.login)
         self.loginButton.grid(row="0", column="0")
         tk.Frame(buttonFrame, height="1", width="30").grid(row="0", column="1")
-        cancelButton = tk.Button(buttonFrame, text="  Cancel  ", command=self.logout)
+        cancelButton = tk.Button(buttonFrame, text="  取消  ", command=self.logout)
         cancelButton.grid(row="0", column="2")
 
         self.mainWindow.mainMenu.menu.delete(5)
-        self.mainWindow.mainMenu.menu.insert_command(5, label="End Fleet Mode", command=self.logout)
+        self.mainWindow.mainMenu.menu.insert_command(5, label="结束舰队模式", command=self.logout)
         self.mainWindow.mainMenu.menu.entryconfig(7, state=tk.DISABLED)
         self.mainWindow.mainMenu.menu.entryconfig(8, state=tk.DISABLED)
         self.mainWindow.characterMenu.configure(state=tk.DISABLED)
@@ -119,7 +120,7 @@ class FleetWindow(tk.Toplevel):
         if loginWindow.loginStatus:
             if self.lowCPUVar.get():
                 settings.lowCPUMode = True
-            self.mainWindow.topLabel.configure(text="Fleet Mode (" + self.characterName + ")")
+            self.mainWindow.topLabel.configure(text="舰队模式（" + self.characterName + "）")
             self.mainWindow.topLabel.grid()
             self.mainWindow.fleetWindow.characterName = self.characterName
             self.mainWindow.animator.dataQueue = self.sockMgr.dataQueue
@@ -153,7 +154,7 @@ class FleetWindow(tk.Toplevel):
             self.mainWindow.animator.errorQueue = None
             self.mainWindow.topLabel.grid_remove()
         self.mainWindow.mainMenu.menu.delete(5)
-        self.mainWindow.mainMenu.menu.insert_command(5, label="Fleet Mode", command=lambda: FleetWindow(self.mainWindow))
+        self.mainWindow.mainMenu.menu.insert_command(5, label="舰队模式", command=lambda: FleetWindow(self.mainWindow))
         self.mainWindow.mainMenu.menu.entryconfig(7, state="normal")
         self.mainWindow.mainMenu.menu.entryconfig(8, state="normal")
         self.mainWindow.characterMenu.configure(state="normal")
@@ -181,7 +182,7 @@ class SocketNotificationWindow(tk.Toplevel):
         self.configure(pady=10, padx=20)
         
         self.wm_attributes("-topmost", True)
-        self.wm_title("PyEveLiveDPS Awaiting Login")
+        self.wm_title("PyEveLiveDPS 等待登陆")
         try:
             self.iconbitmap(sys._MEIPASS + '\\app.ico')
         except Exception:
@@ -192,7 +193,7 @@ class SocketNotificationWindow(tk.Toplevel):
         self.geometry("200x50")
         self.update_idletasks()
             
-        tk.Label(self, text='Waiting for you to login...').grid(row=1, column=1)
+        tk.Label(self, text='等待登陆中...').grid(row=1, column=1)
 
         self.loginStatus = loginQueue.get()
 

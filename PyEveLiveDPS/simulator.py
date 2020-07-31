@@ -35,8 +35,8 @@ class Simulator():
         returnGroup = {}
         if ((self.timesRun*self.interval)%(value["cycle"]*1000) == 0):
             returnGroup['amount'] = random.randint(value["floor"], value["ceiling"])
-            returnGroup['pilotName'] = 'Pilot Name'
-            returnGroup['shipType'] = 'ShipType'
-            returnGroup['weaponType'] = 'Weapon Type'
+            returnGroup['pilotName'] = '飞行员'
+            returnGroup['shipType'] = '舰船'
+            returnGroup['weaponType'] = '武器'
             returnValue.append(returnGroup)
         return returnValue

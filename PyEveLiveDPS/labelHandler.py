@@ -3,15 +3,15 @@ from peld import settings
 import decimal
 
 class LabelHandler(tk.Frame):
-    labels = {"dpsOut": { "text": "DPS Out:" },
-            "dpsIn": { "text": "DPS In:" },
-            "logiOut": { "text": "Logi Out:" },
-            "logiIn": { "text": "Logi In:" },
-            "capTransfered": { "text": "Cap Out:" },
-            "capRecieved": { "text": "Cap In:" },
-            "capDamageOut": { "text": "Cap Dmg Out:" },
-            "capDamageIn": { "text": "Cap Dmg In:" },
-            "mining": { "text": "Mining:" }
+    labels = {"dpsOut": { "text": "DPS输出量：" },
+            "dpsIn": { "text": "DPS遭受量：" },
+            "logiOut": { "text": "遥修输出量：" },
+            "logiIn": { "text": "遥修接收量：" },
+            "capTransfered": { "text": "电容转移量：" },
+            "capRecieved": { "text": "电容接收量：" },
+            "capDamageOut": { "text": "电容吸收/中和输出量：" },
+            "capDamageIn": { "text": "电容吸收/中和遭受量：" },
+            "mining": { "text": "采矿量：" }
             }
     def __init__(self, parent, labels=None, labelSettings=None, **kwargs):
         tk.Frame.__init__(self, parent, **kwargs)

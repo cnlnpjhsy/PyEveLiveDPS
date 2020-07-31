@@ -27,47 +27,47 @@ class LineSettingsFrame(tk.Frame):
         dpsOutFrame = tk.Frame(canvasFrame)
         dpsOutFrame.grid(row="6", column="0", columnspan="5", padx="5", sticky="we")
         self.dpsOutSettings = settings.getDpsOutSettings()
-        self.addLineSection(dpsOutFrame, "Outgoing: DPS", self.dpsOutSettings)
+        self.addLineSection(dpsOutFrame, "输出：DPS", self.dpsOutSettings)
         
         dpsInFrame = tk.Frame(canvasFrame)
         dpsInFrame.grid(row="14", column="0", columnspan="5", padx="5", sticky="we")
         self.dpsInSettings = settings.getDpsInSettings()
-        self.addLineSection(dpsInFrame, "Incoming: DPS", self.dpsInSettings)
+        self.addLineSection(dpsInFrame, "遭受：DPS", self.dpsInSettings)
         
         logiOutFrame = tk.Frame(canvasFrame)
         logiOutFrame.grid(row="8", column="0", columnspan="5", padx="5", sticky="we")
         self.logiOutSettings = settings.getLogiOutSettings()
-        self.addLineSection(logiOutFrame, "Outgoing: logistics", self.logiOutSettings)
+        self.addLineSection(logiOutFrame, "输出：遥修", self.logiOutSettings)
         
         logiInFrame = tk.Frame(canvasFrame)
         logiInFrame.grid(row="16", column="0", columnspan="5", padx="5", sticky="we")
         self.logiInSettings = settings.getLogiInSettings()
-        self.addLineSection(logiInFrame, "Incoming: logistics", self.logiInSettings)
+        self.addLineSection(logiInFrame, "接收：遥修", self.logiInSettings)
         
         capTransferedFrame = tk.Frame(canvasFrame)
         capTransferedFrame.grid(row="10", column="0", columnspan="5", padx="5", sticky="we")
         self.capTransferedSettings = settings.getCapTransferedSettings()
-        self.addLineSection(capTransferedFrame, "Outgoing: capacitor transfer", self.capTransferedSettings)
+        self.addLineSection(capTransferedFrame, "输出：电容转移", self.capTransferedSettings)
         
         capRecievedFrame = tk.Frame(canvasFrame)
         capRecievedFrame.grid(row="18", column="0", columnspan="5", padx="5", sticky="we")
         self.capRecievedSettings = settings.getCapRecievedSettings()
-        self.addLineSection(capRecievedFrame, "Incoming: capacitor transfer (including +nos)", self.capRecievedSettings)
+        self.addLineSection(capRecievedFrame, "接收：电容转移（包括吸电）", self.capRecievedSettings)
         
         capDamageOutFrame = tk.Frame(canvasFrame)
         capDamageOutFrame.grid(row="12", column="0", columnspan="5", padx="5", sticky="we")
         self.capDamageOutSettings = settings.getCapDamageOutSettings()
-        self.addLineSection(capDamageOutFrame, "Outgoing: capacitor drain", self.capDamageOutSettings)
+        self.addLineSection(capDamageOutFrame, "输出：电容中和/吸收", self.capDamageOutSettings)
         
         capDamageInFrame = tk.Frame(canvasFrame)
         capDamageInFrame.grid(row="20", column="0", columnspan="5", padx="5", sticky="we")
         self.capDamageInSettings = settings.getCapDamageInSettings()
-        self.addLineSection(capDamageInFrame, "Incoming: capacitor drain", self.capDamageInSettings)
+        self.addLineSection(capDamageInFrame, "遭受：电容中和/吸收", self.capDamageInSettings)
         
         miningFrame = tk.Frame(canvasFrame)
         miningFrame.grid(row="22", column="0", columnspan="5", padx="5", sticky="we")
         self.miningSettings = settings.getMiningSettings()
-        self.addLineSection(miningFrame, "Mining", self.miningSettings, mining=True)
+        self.addLineSection(miningFrame, "采矿", self.miningSettings, mining=True)
         
     def bindMousewheel(self, event):
         self.scrollableCanvas.bind_all("<MouseWheel>",self.MouseWheelHandler)
@@ -99,20 +99,20 @@ class LineSettingsFrame(tk.Frame):
         innerFrame.columnconfigure(0, weight=1)
         innerFrame.grid(row="2", column="0", columnspan="3", sticky="we")
         lineCheckboxValue = tk.BooleanVar()
-        lineCheckbox = tk.Checkbutton(frame, variable=lineCheckboxValue, text="Only show label", state="disabled")
+        lineCheckbox = tk.Checkbutton(frame, variable=lineCheckboxValue, text="仅显示数据标签", state="disabled")
         lineCheckbox.grid(row="0", column="2", sticky="w")
         lineCheckbox.var = lineCheckboxValue
         peakCheckboxValue = tk.BooleanVar()
-        peakCheckbox = tk.Checkbutton(frame, variable=peakCheckboxValue, text="Show peak value", state="disabled")
+        peakCheckbox = tk.Checkbutton(frame, variable=peakCheckboxValue, text="显示峰值", state="disabled")
         peakCheckbox.grid(row="1", column="2", sticky="e")
         peakCheckbox.var = peakCheckboxValue
         totalCheckboxValue = tk.BooleanVar()
-        totalCheckbox = tk.Checkbutton(frame, variable=totalCheckboxValue, text="Show total value", state="disabled")
+        totalCheckbox = tk.Checkbutton(frame, variable=totalCheckboxValue, text="显示总量", state="disabled")
         totalCheckbox.grid(row="1", column="0", columnspan="2", sticky="e")
         totalCheckbox.var = totalCheckboxValue
         if mining:
             m3CheckboxValue = tk.BooleanVar()
-            m3Checkbox = tk.Checkbutton(frame, variable=m3CheckboxValue, text="Show m3 mined instead of units", state="disabled")
+            m3Checkbox = tk.Checkbutton(frame, variable=m3CheckboxValue, text="以采得矿石的体积（m³）显示", state="disabled")
             m3Checkbox.grid(row="1", column="0", columnspan="2", sticky="w")
             m3Checkbox.var = m3CheckboxValue
         else: m3Checkbox = None
@@ -126,7 +126,7 @@ class LineSettingsFrame(tk.Frame):
             totalCheckboxValue.set(settingsList[0].get("showTotal", False))
             if mining: m3CheckboxValue.set(settingsList[0].get("showM3", False))
             self.addLineCustomizationSection(innerFrame, text, checkboxValue, lineCheckbox, peakCheckbox, totalCheckbox, settingsList, m3Checkbox)
-        sectionCheckbox = tk.Checkbutton(frame, variable=checkboxValue, text=text + " tracking",
+        sectionCheckbox = tk.Checkbutton(frame, variable=checkboxValue, text=text + "数据追踪",
                                          command=lambda:self.addLineCustomizationSection(innerFrame, text, checkboxValue, lineCheckbox,
                                                                                          peakCheckbox, totalCheckbox, settingsList, m3Checkbox))
         font = tkFont.Font(font=sectionCheckbox['font'])
@@ -138,7 +138,7 @@ class LineSettingsFrame(tk.Frame):
     def addLineCustomizationSection(self, frame, text, checkboxValue, lineCheckbox, peakCheckbox, totalCheckbox, settingsList, m3Checkbox):
         if checkboxValue.get():
             frame.grid()
-            innerLabel = tk.Label(frame, text="Color and threshold (when to change colors) for this line:")
+            innerLabel = tk.Label(frame, text="显示此数据的线条改变颜色时的阈值及改变的颜色：")
             innerLabel.grid(row="0", column="0")
             font = tkFont.Font(font=innerLabel['font'])
             font.config(slant='italic')
@@ -184,14 +184,14 @@ class LineSettingsFrame(tk.Frame):
             font.config(weight='bold')
             removeButton['font'] = font
             removeButton.grid(row=index, column="0")
-            initialLabel = tk.Label(frame, text="Threshold when the line changes color:")
+            initialLabel = tk.Label(frame, text="数据超过阈值：")
             initialLabel.grid(row=index, column="1")
             initialThreshold = tk.Entry(frame, textvariable=settingsList[index]["transitionValue"], width=10)
             if (index == 0):
                 initialThreshold.configure(state="disabled")
                 removeButton.configure(state="disabled", borderwidth="0", text=" X ")
             initialThreshold.grid(row=index, column="2")
-            initialLabel = tk.Label(frame, text="Color:")
+            initialLabel = tk.Label(frame, text="时，线条颜色变为：")
             initialLabel.grid(row=index, column="3")
             colorButton = tk.Button(frame, text="    ", 
                                     command=lambda i=index:self.colorWindow(settingsList[i], colorButton), 
@@ -199,7 +199,7 @@ class LineSettingsFrame(tk.Frame):
             colorButton.grid(row=index, column="4")
             index += 1
         
-        addLineButton = tk.Button(frame, text="Add Another Threshold",
+        addLineButton = tk.Button(frame, text="添加阈值",
                                   command=lambda:self.addLine(settingsList, frame))
         addLineButton.grid(row="100", column="1")
             
@@ -214,11 +214,11 @@ class LineSettingsFrame(tk.Frame):
         font.config(weight='bold')
         removeButton['font'] = font
         removeButton.grid(row=lineNumber, column="0")
-        lineLabel = tk.Label(dpsFrame, text="Threshold when the line changes color:")
+        lineLabel = tk.Label(dpsFrame, text="数据超过阈值：")
         lineLabel.grid(row=lineNumber, column="1")
         initialThreshold = tk.Entry(dpsFrame, textvariable=settingsList[lineNumber]["transitionValue"], width=10)
         initialThreshold.grid(row=lineNumber, column="2")
-        initialLabel = tk.Label(dpsFrame, text="Color:")
+        initialLabel = tk.Label(dpsFrame, text="时，线条颜色变为：")
         initialLabel.grid(row=lineNumber, column="3")
         colorButton = tk.Button(dpsFrame, text="    ", 
                                 command=lambda:self.colorWindow(settingsList[lineNumber], colorButton), 
@@ -260,7 +260,7 @@ class LineSettingsFrame(tk.Frame):
                 try:
                     int(setting["transitionValue"].get())
                 except ValueError:
-                    tk.messagebox.showerror("Error", "Please enter a number for all line color threshold values")
+                    tk.messagebox.showerror("错误", "请输入一个数值作为所有线条颜色改变的阈值。")
                     return
             for setting in settings:
                 setting["transitionValue"] = int(setting["transitionValue"].get())

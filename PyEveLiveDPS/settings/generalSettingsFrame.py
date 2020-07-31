@@ -16,10 +16,10 @@ class GeneralSettingsFrame(tk.Frame):
         
         checkboxValue = tk.BooleanVar()
         checkboxValue.set(settings.getGraphDisabled())
-        self.graphDisabled = tk.Checkbutton(self, text="Disable graph entirely", variable=checkboxValue)
+        self.graphDisabled = tk.Checkbutton(self, text="完全禁用图象", variable=checkboxValue)
         self.graphDisabled.var = checkboxValue
         self.graphDisabled.grid(row=self.counter, column="1", columnspan="2")
-        descriptor = tk.Label(self, text="Labels will still be shown")
+        descriptor = tk.Label(self, text="数据标签将仍被显示")
         font = tkFont.Font(font=descriptor['font'])
         font.config(slant='italic')
         descriptor['font'] = font
@@ -29,18 +29,18 @@ class GeneralSettingsFrame(tk.Frame):
         
         self.secondsVar = tk.StringVar()
         self.secondsVar.set(settings.getSeconds())
-        self.addSetting(self.secondsVar, "Number of seconds to average values:", 
-                        "Recommended to set this value higher than your weapon cycle time")
+        self.addSetting(self.secondsVar, "每求一次数据平均值的时间间隔（秒）:", 
+                        "建议将此值设定为高于你武器射速的数值。")
         
         self.intervalVar = tk.StringVar()
         self.intervalVar.set(settings.getInterval())
-        self.addSetting(self.intervalVar, "How often to update graph/labels in milliseconds:", 
-                        "The lower you set this value, the higher your CPU usage will be")
+        self.addSetting(self.intervalVar, "更新图象与数据标签的时间间隔（毫秒）:", 
+                        "该值越低，电脑CPU的占用越高。")
         
         self.transparencyVar = tk.StringVar()
         self.transparencyVar.set(settings.getCompactTransparency())
-        self.addSetting(self.transparencyVar, "Window transparency percentage in compact mode:", 
-                        "100 is fully visible, 0 is invisible")
+        self.addSetting(self.transparencyVar, "紧凑模式下的窗口透明度:", 
+                        "100为完全可见，0为完全不可见。")
         
         
     def addSetting(self, var, labelText, descriptorText):
@@ -62,54 +62,54 @@ class GeneralSettingsFrame(tk.Frame):
         try:
             secondsSetting = int(self.secondsVar.get())
         except ValueError:
-            tk.messagebox.showerror("Error", "Please enter a number for number of seconds to average DPS")
+            tk.messagebox.showerror("错误", "请输入一个数值（秒）来求平均DPS")
             return
         if (secondsSetting < 2 or secondsSetting > 600):
-            tk.messagebox.showerror("Error", "Please enter a value between 2-600 for number of seconds to average DPS")
+            tk.messagebox.showerror("错误", "请输入一个介于2-600的数值（秒）来求平均DPS")
             return  
         
         try:
             intervalSetting = int(self.intervalVar.get())
         except ValueError:
-            tk.messagebox.showerror("Error", "Please enter a number for milliseconds to update graph")
+            tk.messagebox.showerror("错误", "请输入一个数值（毫秒）来更新图象")
             return
         if (intervalSetting < 10 or intervalSetting > 1000):
-            tk.messagebox.showerror("Error", "Please enter a value between 10-1000 for milliseconds to update graph")
+            tk.messagebox.showerror("错误", "请输入一个介于10-1000的数值（毫秒）来更新图象")
             return
         
         if ((secondsSetting*1000)/intervalSetting <= 10):
-            tk.messagebox.showerror("Error", "(Seconds to average DPS*1000)/(Graph update interval) must be > 10.\n" +
-                                   "If it is less than 10, we won't have enough data to draw an accurate graph!")
+            tk.messagebox.showerror("错误", "(求平均值的时间间隔（秒）*1000)/(更新图象的时间间隔) 必须大于10。\n" +
+                                   "如果该值小于10，数据将不足以绘出准确图象。")
             return
         
         if ((secondsSetting*1000)/intervalSetting < 20):
-            okCancel = tk.messagebox.askokcancel("Continue?", "(Seconds to average DPS*1000)/(Graph update interval)\n is < 20\n" +
-                                   "This is ok, but it is recommended to increase your (Seconds to average DPS) or decrease your (Graph update interval) to improve your graphing experience.\n"
-                                   "Would you like to keep these settings?")
+            okCancel = tk.messagebox.askokcancel("继续？", "(求平均值的时间间隔（秒）*1000)/(更新图象的时间间隔) 小于20。\n" +
+                                   "这是被允许的，但建议你增大 求平均值的时间间隔（秒）或减小 更新图象的时间间隔 来提高图象准确度。\n"
+                                   "是否仍要保留这些设置？")
             if not okCancel:
                 return
             
         if (intervalSetting < 50):
-            okCancel = tk.messagebox.askokcancel("Continue?", "Setting the graph update interval to less than 50ms is generally a bad idea.  Your CPU won't like it."
-                                                 "Would you like to keep these settings?")
+            okCancel = tk.messagebox.askokcancel("继续？", "将更新图象的时间间隔设置为低于50ms会极大增加电脑CPU的负荷。"
+                                                 "是否仍要保留这些设置？")
             if not okCancel:
                 return
             
         if (secondsSetting/intervalSetting > 1):
-            okCancel = tk.messagebox.askokcancel("Continue?", "(Seconds to average DPS)/(Graph update interval)\n is > 1\n" +
-                                   "This is ok, but it is recommended to decrease your (Graph update interval) to improve performance.\n"
-                                   "You don't need such a low graph update interval if you are using a high (Seconds to average DPS)\n"
-                                   "Would you like to keep these settings?")
+            okCancel = tk.messagebox.askokcancel("继续？", "(求平均值的时间间隔（秒）*1000)/(更新图象的时间间隔) 大于1000。\n" +
+                                   "这是被允许的，但建议你减小 更新图象的时间间隔 来提高性能。\n"
+                                   "若你将 求平均值的时间间隔 设置得很高时，没有必要将 更新图象的时间间隔 设置得如此低。\n"
+                                   "是否仍要保留这些设置？")
             if not okCancel:
                 return
             
         try:
             compactTransparencySetting = int(self.transparencyVar.get())
         except ValueError:
-            tk.messagebox.showerror("Error", "Please enter a number for compact transparency percentage")
+            tk.messagebox.showerror("错误", "请输入紧凑模式下的窗口透明度")
             return
         if (compactTransparencySetting < 1 or compactTransparencySetting > 100):
-            tk.messagebox.showerror("Error", "Please enter a value between 1-100 for compact transparency percentage")
+            tk.messagebox.showerror("错误", "请输入一个介于1-100的紧凑模式下的窗口透明度")
             return  
         
         return {"seconds": secondsSetting, "interval": intervalSetting, 
