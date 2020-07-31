@@ -1,5 +1,5 @@
 _oreVolume = {
-    "Veldspar": 0.1,
+    "凡晶石": 0.1,
     "Concentrated Veldspar": 0.1,
     "Dense Veldspar": 0.1,
     "Chondrite": 0.1,

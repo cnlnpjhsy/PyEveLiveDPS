@@ -17,10 +17,10 @@ from settings.fleetSettingsFrame import FleetSettingsFrame
 from peld import settings
 
 class SideBar(tk.Frame):
-    images = {"Tracking": "lines.png",
-              "Labels": "labels.png",
-              "Pilot Breakdown": "pilotDetails.png",
-              "Fleet Window": "fleet.png"
+    images = {"数据追踪": "lines.png",
+              "数据标签": "labels.png",
+              "按飞行员显示": "pilotDetails.png",
+              "舰队窗口": "fleet.png"
              }
     
     def __init__(self, parent, mainWindow, **kwargs):
@@ -71,7 +71,7 @@ class SettingsWindow(tk.Toplevel):
         self.graph = mainWindow.getGraph()
         
         self.wm_attributes("-topmost", True)
-        self.wm_title("PyEveLiveDPS Settings")
+        self.wm_title("PyEveLiveDPS 设置")
         try:
             self.iconbitmap(sys._MEIPASS + '\\app.ico')
         except Exception:
@@ -103,8 +103,8 @@ class SettingsWindow(tk.Toplevel):
         fleetFrame.grid(row="0", column="1", columnspan="10", rowspan="90", sticky="wens")
         fleetFrame.grid_remove()
         
-        self.options = [["General", generalFrame], ["Tracking", linesFrame], ["Labels", labelsFrame],
-                        ["Pilot Breakdown", detailsFrame], ["Fleet Window", fleetFrame]]
+        self.options = [["总体设定", generalFrame], ["数据追踪", linesFrame], ["数据标签", labelsFrame],
+                        ["按飞行员显示", detailsFrame], ["舰队窗口", fleetFrame]]
         
         self.sideBar = SideBar(self, self.mainWindow, bg="white", width="125", relief="groove", borderwidth=1)
         self.sideBar.grid(row="0", column="0", rowspan="90", sticky="nsew", padx="1", pady="1")
@@ -115,10 +115,10 @@ class SettingsWindow(tk.Toplevel):
         
         buttonFrame = tk.Frame(self)
         buttonFrame.grid(row="100", column="0", columnspan="5")
-        okButton = tk.Button(buttonFrame, text="  Apply All  ", command=self.doSettings)
+        okButton = tk.Button(buttonFrame, text="  应用  ", command=self.doSettings)
         okButton.grid(row="0", column="0")
         tk.Frame(buttonFrame, height="1", width="30").grid(row="0", column="1")
-        cancelButton = tk.Button(buttonFrame, text="  Cancel  ", command=self.destroy)
+        cancelButton = tk.Button(buttonFrame, text="  取消  ", command=self.destroy)
         cancelButton.grid(row="0", column="2")
         
         tk.Frame(self, height="20", width="10").grid(row="101", column="1", columnspan="5")
@@ -127,10 +127,10 @@ class SettingsWindow(tk.Toplevel):
         for option, frame in self.options:
             if option == title:
                 frame.grid()
-                if option == "Labels":
+                if option == "数据标签":
                     self.geometry("1100x600")
-                elif option == "Tracking":
-                    self.geometry("600x600")
+                elif option == "数值追踪":
+                    self.geometry("900x600")
                 else:
                     self.geometry("550x600")
             else:
@@ -140,8 +140,8 @@ class SettingsWindow(tk.Toplevel):
         
     def doSettings(self):
         if settings.lowCPUMode:
-            if not tk.messagebox.askokcancel("Are you sure?", "Applying settings while in 'Low CPU Fleet Mode'" + 
-                                         " will not apply until after you end Fleet Mode.\n\n" + 
+            if not tk.messagebox.askokcancel("你确定吗？", "在低CPU占用舰队模式中，设置" + 
+                                         "将会在舰队模式关闭后才会被应用。\n\n" + 
                                          "It will also remove most of your settings."):
                 return
         settingsToApply = {}

@@ -133,7 +133,27 @@ _logLanguageRegex = {
         'capNeutralizedIn': "\(combat\) <.*?ffe57f7f><b>([0-9]+).*>のエネルギーが解放されました<",
         'nosTaken': "\(combat\) <.*?><b>\-([0-9]+).*> エネルギードレイン 攻撃者:<",
         'mined': "\(mining\) .* <b><.*?><.*?>([0-9]+).*<b>(?:<localized .*?>)?(.+)\*</b>"
-    }
+    },
+    'chinese':{
+        'character': "(?<=收听者: ).*",
+        'sessionTime': "(?<=进程开始: ).*",
+        'pilotAndWeapon': '(?:.*ffffffff>(?:<localized .*?>)?(?P<default_pilot>[^\(\)<>]*)(?:\[.*\((?:<localized .*?>)?(?P<default_ship>.*)\)<|<)/b.*> \-(?: (?:<localized .*?>)?(?P<default_weapon>.*?)(?: \-|<)|.*))',
+        'damageOut': "\(combat\) <.*?><b>([0-9]+).*>对<",
+        'damageIn': "\(combat\) <.*?><b>([0-9]+).*>来自<",
+        'armorRepairedOut': "\(combat\) <.*?><b>([0-9]+).*>远程装甲维修量至<",
+        'hullRepairedOut': "\(combat\) <.*?><b>([0-9]+).*>远程结构维修量至<",
+        'shieldBoostedOut': "\(combat\) <.*?><b>([0-9]+).*>远程护盾回充增量至<",
+        'armorRepairedIn': "\(combat\) <.*?><b>([0-9]+).*>远程装甲维修量由<",
+        'hullRepairedIn': "\(combat\) <.*?><b>([0-9]+).*>远程结构维修量由<",
+        'shieldBoostedIn': "\(combat\) <.*?><b>([0-9]+).*>远程护盾回充增量由<",
+        'capTransferedOut': "\(combat\) <.*?><b>([0-9]+).*>远程电容传输至<",
+        'capNeutralizedOut': "\(combat\) <.*?ff7fffff><b>([0-9]+).*>能量中和<",
+        'nosRecieved': "\(combat\) <.*?><b>\+([0-9]+).*>被从<",
+        'capTransferedIn': "\(combat\) <.*?><b>([0-9]+).*>远程电容传输量由<",
+        'capNeutralizedIn': "\(combat\) <.*?ffe57f7f><b>([0-9]+).*>能量中和<",
+        'nosTaken': "\(combat\) <.*?><b>\-([0-9]+).*>被吸取到<",
+        'mined': "\(mining\) .*<b><.*?><.*?>([0-9]+).*>个单位的.*<b>(.+)</b>"
+        }
 }
 
 _logReaders = []
@@ -184,7 +204,7 @@ class CharacterDetector(FileSystemEventHandler):
 
         self.characterMenu.menu.add_separator()
         from settings.overviewSettings import OverviewSettingsWindow
-        self.characterMenu.menu.add_command(label='Open overview settings', command=OverviewSettingsWindow)
+        self.characterMenu.menu.add_command(label='打开总览设置', command=OverviewSettingsWindow)
         
     def on_created(self, event):
         self.addLog(event.src_path)
@@ -394,13 +414,13 @@ class PlaybackLogReader(BaseLogReader):
             self.log.readline()
             self.log.readline()
         except:
-            messagebox.showerror("Error", "This doesn't appear to be a EVE log file.\nPlease select a different file.")
+            messagebox.showerror("错误", "选定文件不是EVE的记录文件。\n请选择其他文件。")
             raise BadLogException("not character log")
         characterLine = self.log.readline()
         try:
             self.character, self.language = ProcessCharacterLine(characterLine)
         except BadLogException:
-            messagebox.showerror("Error", "This doesn't appear to be a EVE combat log.\nPlease select a different file.")
+            messagebox.showerror("错误", "选定文件不是EVE的战斗记录文件。\n请选择其他文件。")
             raise BadLogException("not character log")
         logging.info('Log language is ' + self.language)
         
@@ -503,11 +523,11 @@ class LogReader(BaseLogReader):
             self.log.readline()
             collisionCharacter, language = ProcessCharacterLine(self.log.readline())
             logging.error('Log file collision on characters' + self.character + " and " + collisionCharacter)
-            messagebox.showerror("Error", "Log file collision on characters:\n\n" + self.character + " and " + collisionCharacter +
-                                "\n\nThis happens when both characters log in at exactly the same second.\n" + 
-                                "This makes it impossible to know which character owns which log.\n\n" + 
-                                "Please restart the client of the character you want to track to use this program.\n" + 
-                                "If you already did, you can ignore this message, or delete this log file:\n" + logPath)
+            messagebox.showerror("错误", "以下人物的记录文件发生冲突：\n\n" + self.character + " ，" + collisionCharacter +
+                                "\n\n此情况发生于两个人物恰好在同一时间登录游戏。\n" + 
+                                "这使得PELD无法判断每个人物所属的记录文件。\n\n" + 
+                                "请重启你想追踪数据的人物的客户端来使用PELD。\n" + 
+                                "若已经重启，请忽略这条错误信息，或者删除该记录文件：\n" + logPath)
             raise BadLogException("log file collision")
         self.log.read()
         self.compileRegex()

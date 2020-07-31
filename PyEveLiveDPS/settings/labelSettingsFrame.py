@@ -9,15 +9,15 @@ import tkinter.font as tkFont
 from peld import settings
 
 class LabelSettingsFrame(tk.Frame):
-    text = {"dpsOut": "DPS Out:",
-            "dpsIn": "DPS In:",
-            "logiOut": "Logi Out:",
-            "logiIn": "Logi In:",
-            "capTransfered": "Cap Out:",
-            "capRecieved": "Cap In:",
-            "capDamageOut": "Cap Dmg Out:",
-            "capDamageIn": "Cap Dmg In:",
-            "mining": "Mining:"}
+    text = {"dpsOut": "DPS输出量:",
+            "dpsIn": "DPS遭受量:",
+            "logiOut": "遥修输出量:",
+            "logiIn": "遥修接收量:",
+            "capTransfered": "电容转移量:",
+            "capRecieved": "电容接收量:",
+            "capDamageOut": "电容吸收/中和输出量:",
+            "capDamageIn": "电容吸收/中和遭受量:",
+            "mining": "采矿量:"}
     def __init__(self, parent, mainWindow, **kwargs):
         tk.Frame.__init__(self, parent, **kwargs)
         self.parent = parent
@@ -27,15 +27,15 @@ class LabelSettingsFrame(tk.Frame):
         self.gridColumns = settings.getLabelColumns()
         self.labels = settings.getLabels()
         
-        tk.Label(self, text="Labels on the left grid will be attached to the left side of the window.\n" +
-                    "Labels on the right grid will be attached to the right side of the window.\n\n" + 
-                    "You can drag and drop labels to move them to a different position in the grid."
+        tk.Label(self, text="在左侧格的标签将会被固定在窗口的左侧，" +
+                    "在右侧格的标签将会被固定在窗口的右侧。\n\n" + 
+                    "你可以拖拽标签，将标签移动到到表格中的不同位置。"
                     ).grid(row="0", column="1", columnspan="5", pady=10)
-        tk.Label(self, text="Use the arrows to move columns from one side of the window to another."
+        tk.Label(self, text="使用箭头来让标签列从窗口的一侧移至另一侧。"
                     ).grid(row="3", column="1", columnspan="5")
-        tk.Label(self, text="The number box represents how many decimal places the label will use. 0 is no decimal places.\n" +
-                    "The checkbox is to represent the number in thousands.\n\n" +
-                    "For instance, if you choose '3' decimals, and check the box, the number 1,234 will show as 1.234K"
+        tk.Label(self, text="设置数字框可以改变标签采用的小数点位置。0为没有小数点。\n" +
+                    "勾选复选框\"K\"可将数值以千为单位显示。\n\n" +
+                    "例如，如果将小数点位置设置为3并勾选复选框，则数值1,234将会显示为1.234K。"
                     ).grid(row="100", column="1", columnspan="5", pady=10)
         
         tk.Frame(self, height="1", width="10").grid(row="1",column="2")

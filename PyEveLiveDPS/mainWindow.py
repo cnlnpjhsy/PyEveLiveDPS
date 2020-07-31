@@ -37,7 +37,7 @@ class MainWindow(tk.Tk):
         self.minsize(175,50)
         
         # Set title and icon for alt+tab and taskbar
-        self.wm_title("PyEveLiveDPS")
+        self.wm_title("PyEveLiveDPS Main Window")
         try:
             self.iconbitmap(sys._MEIPASS + '\\app.ico')
         except Exception:
@@ -49,7 +49,7 @@ class MainWindow(tk.Tk):
         self.addToTaskbar()
         
         # label that appears at the top of the window in special modes like simulation and playback modes
-        self.topLabel = tk.Label(self, text="Simulation Mode", fg="white", background="black")
+        self.topLabel = tk.Label(self, text="模拟模式", fg="white", background="black")
         font = tkFont.Font(font=self.topLabel['font'])
         font.config(slant='italic')
         self.topLabel['font'] = font
@@ -140,7 +140,7 @@ class MainWindow(tk.Tk):
         
     def addMenus(self):
         # character menu options are added dynamically by CharacterDetector, so we pass this into that
-        self.characterMenu = tk.Menubutton(text="Character...", background="black", fg="white", borderwidth="1",
+        self.characterMenu = tk.Menubutton(text="人物", background="black", fg="white", borderwidth="1",
                                       highlightbackground="black", highlightthickness="1",
                                       activebackground="gray25", activeforeground="white")
         self.characterMenu.grid(row="5", column="2")
@@ -149,29 +149,29 @@ class MainWindow(tk.Tk):
         self.characterDetector = logreader.CharacterDetector(self, self.characterMenu)
         
         # Set up file menu options
-        self.mainMenu = tk.Menubutton(text="File...", background="black", fg="white", borderwidth="1",
+        self.mainMenu = tk.Menubutton(text="文件", background="black", fg="white", borderwidth="1",
                                       highlightbackground="black", highlightthickness="1",
                                       activebackground="gray25", activeforeground="white")
         self.mainMenu.grid(row="5", column="1")
         self.mainMenu.menu = tk.Menu(self.mainMenu, tearoff=False)
         self.mainMenu["menu"] = self.mainMenu.menu
-        self.mainMenu.menu.add_command(label="Edit Profile Settings", command=lambda: settingsWindow.SettingsWindow(self))
+        self.mainMenu.menu.add_command(label="个人配置设置...", command=lambda: settingsWindow.SettingsWindow(self))
         
         # add all the profiles from settings into the menu
         self.profileMenu = tk.Menu(self.mainMenu, tearoff=False)
         settings.initializeMenu(self)
         
-        self.mainMenu.menu.add_cascade(label="Profile", menu=self.profileMenu)
+        self.mainMenu.menu.add_cascade(label="配置", menu=self.profileMenu)
         self.mainMenu.menu.add_separator()
-        self.mainMenu.menu.add_command(label="Clear Total/Peak Values", state=tk.DISABLED)
+        self.mainMenu.menu.add_command(label="清除总量/峰值", state=tk.DISABLED)
         self.mainMenu.menu.add_separator()
-        self.mainMenu.menu.add_command(label="Fleet Mode", command=lambda: fleetConnectionWindow.FleetWindow(self))
+        self.mainMenu.menu.add_command(label="舰队模式", command=lambda: fleetConnectionWindow.FleetWindow(self))
         self.mainMenu.menu.add_separator()
-        self.mainMenu.menu.add_command(label="Simulate Input", command=lambda: simulationWindow.SimulationWindow(self))
-        getLogFilePath = lambda: tk.filedialog.askopenfilename(initialdir=self.characterDetector.path, title="Select log file")
-        self.mainMenu.menu.add_command(label="Playback Log", command=lambda: self.characterDetector.playbackLog(getLogFilePath()))
+        self.mainMenu.menu.add_command(label="开始模拟", command=lambda: simulationWindow.SimulationWindow(self))
+        getLogFilePath = lambda: tk.filedialog.askopenfilename(initialdir=self.characterDetector.path, title="选择战斗记录文件")
+        self.mainMenu.menu.add_command(label="回放战斗记录", command=lambda: self.characterDetector.playbackLog(getLogFilePath()))
         self.mainMenu.menu.add_separator()
-        self.mainMenu.menu.add_command(label="Quit", command=self.quitEvent)
+        self.mainMenu.menu.add_command(label="退出", command=self.quitEvent)
     
     def showClearMenuOption(self, show, command):
         if show:
@@ -327,18 +327,18 @@ class MainWindow(tk.Tk):
         """ adds the playback frame underneath the graph when in 'playback' mode """
         self.mainMenu.menu.entryconfig(5, state="disabled")
         self.mainMenu.menu.delete(8)
-        self.mainMenu.menu.insert_command(8, label="Stop Log Playback", command=self.characterDetector.stopPlayback)
-        self.topLabel.configure(text="Playback Mode")
+        self.mainMenu.menu.insert_command(8, label="停止回放战斗记录", command=self.characterDetector.stopPlayback)
+        self.topLabel.configure(text="回放模式")
         self.topLabel.grid()
         self.playbackFrame = playbackFrame.PlaybackFrame(self, startTime, endTime)
         self.playbackFrame.grid(row="11", column="1", columnspan="19", sticky="news")
     
     def removePlaybackFrame(self):
         """ removes the playback frame when we leave playback mode """
-        getLogFilePath = lambda: tk.filedialog.askopenfilename(initialdir=self.characterDetector.path, title="Select log file")
+        getLogFilePath = lambda: tk.filedialog.askopenfilename(initialdir=self.characterDetector.path, title="选择战斗记录文件")
         self.mainMenu.menu.entryconfig(5, state="normal")
         self.mainMenu.menu.delete(8)
-        self.mainMenu.menu.insert_command(8, label="Playback Log", command=lambda: self.characterDetector.playbackLog(getLogFilePath()))
+        self.mainMenu.menu.insert_command(8, label="回放战斗记录", command=lambda: self.characterDetector.playbackLog(getLogFilePath()))
         self.topLabel.grid_remove()
         self.playbackFrame.grid_remove()
         self.animator.catchup()

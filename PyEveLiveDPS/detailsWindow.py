@@ -15,6 +15,7 @@ class DetailsWindow(tk.Toplevel):
         tk.Toplevel.__init__(self)
         self.baseWindow = BaseWindow(self)
         self.mainWindow = mainWindow
+        self.wm_title("PyEveLiveDPS Breakdown")
         
         self.columnconfigure(5, weight=1)
         self.rowconfigure(10, weight=1)
@@ -37,7 +38,7 @@ class DetailsWindow(tk.Toplevel):
                                settings.detailsWindowX, settings.detailsWindowY))
         self.update_idletasks()
         
-        self.topLabel = tk.Label(self, text="Pilot Breakdown", fg="white", background="black")
+        self.topLabel = tk.Label(self, text="按飞行员显示", fg="white", background="black")
         self.topLabel.grid(row="5", column="5", columnspan="10")
         self.makeDraggable(self.topLabel)
         

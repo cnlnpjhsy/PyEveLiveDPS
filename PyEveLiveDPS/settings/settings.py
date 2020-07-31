@@ -142,25 +142,25 @@ class Settings(FileSystemEventHandler):
         self.selectedIndex.set(0)
         
         self.mainWindow.profileMenu.add_separator()
-        self.mainWindow.profileMenu.add_command(label="Add New Profile", command=lambda: self.addProfileWindow(add=True))
-        self.mainWindow.profileMenu.add_command(label="Duplicate Current Profile", command=lambda: self.addProfileWindow(duplicate=True))
-        self.mainWindow.profileMenu.add_command(label="Rename Current Profile", command=lambda: self.addProfileWindow(rename=True))
-        self.mainWindow.profileMenu.add_command(label="Delete Current Profile", command=self.deleteProfileWindow)
+        self.mainWindow.profileMenu.add_command(label="添加新配置", command=lambda: self.addProfileWindow(add=True))
+        self.mainWindow.profileMenu.add_command(label="复制当前配置", command=lambda: self.addProfileWindow(duplicate=True))
+        self.mainWindow.profileMenu.add_command(label="重命名当前配置", command=lambda: self.addProfileWindow(rename=True))
+        self.mainWindow.profileMenu.add_command(label="删除当前配置", command=self.deleteProfileWindow)
         
     def addProfileWindow(self, add=False, duplicate=False, rename=False):
         if rename and (self.allSettings[self.selectedIndex.get()]["profile"] == "Default"):
-            tk.messagebox.showerror("Error", "You can't rename the Default profile.")
+            tk.messagebox.showerror("错误", "不能重命名Default配置。")
             return
         
         self.newProfileWindow = tk.Toplevel()
         self.newProfileWindow.wm_attributes("-topmost", True)
         
         if add:
-            self.newProfileWindow.wm_title("New Profile")
+            self.newProfileWindow.wm_title("新配置")
         elif duplicate:
-            self.newProfileWindow.wm_title("Duplicate Profile")
+            self.newProfileWindow.wm_title("复制配置")
         elif rename:
-            self.newProfileWindow.wm_title("Rename Profile")
+            self.newProfileWindow.wm_title("重命名配置")
             
         try:
             self.newProfileWindow.iconbitmap(sys._MEIPASS + '\\app.ico')
@@ -174,7 +174,7 @@ class Settings(FileSystemEventHandler):
         
         tk.Frame(self.newProfileWindow, height="10", width="1").grid(row="0", column="0")
         
-        profileLabel = tk.Label(self.newProfileWindow, text="    New Profile Name:")
+        profileLabel = tk.Label(self.newProfileWindow, text="    新配置名称：")
         profileLabel.grid(row="1", column="0")
         self.profileString = tk.StringVar()
         if duplicate:
@@ -192,26 +192,26 @@ class Settings(FileSystemEventHandler):
         buttonFrame.grid(row="100", column="0", columnspan="5")
         tk.Frame(buttonFrame, height="1", width="30").grid(row="0", column="0")
         if add:
-            okButton = tk.Button(buttonFrame, text="  Add  ", command=lambda: self.addProfile(add=True))
+            okButton = tk.Button(buttonFrame, text="  添加  ", command=lambda: self.addProfile(add=True))
             profileInput.bind("<Return>", lambda e: self.addProfile(add=True))
         elif duplicate:
-            okButton = tk.Button(buttonFrame, text="  Add  ", command=lambda: self.addProfile(duplicate=True))
+            okButton = tk.Button(buttonFrame, text="  添加  ", command=lambda: self.addProfile(duplicate=True))
             profileInput.bind("<Return>", lambda e: self.addProfile(duplicate=True))
         elif rename:
-            okButton = tk.Button(buttonFrame, text="  Rename  ", command=lambda: self.addProfile(rename=True))
+            okButton = tk.Button(buttonFrame, text="  重命名  ", command=lambda: self.addProfile(rename=True))
             profileInput.bind("<Return>", lambda e: self.addProfile(rename=True))
         okButton.grid(row="0", column="1")
         tk.Frame(buttonFrame, height="1", width="30").grid(row="0", column="2")
-        cancelButton = tk.Button(buttonFrame, text="  Cancel  ", command=self.newProfileWindow.destroy)
+        cancelButton = tk.Button(buttonFrame, text="  取消  ", command=self.newProfileWindow.destroy)
         cancelButton.grid(row="0", column="3")
         
     def addProfile(self, add=False, duplicate=False, rename=False):
         if (self.profileString.get() == "Default"):
-            tk.messagebox.showerror("Error", "There can only be one profile named 'Default'")
+            tk.messagebox.showerror("错误", "只能有一个名为'Default'的配置。")
             return
         for profile in self.allSettings:
             if self.profileString.get() == profile["profile"]:
-                tk.messagebox.showerror("Error", "There is already a profile named '" + self.profileString.get() + "'")
+                tk.messagebox.showerror("错误", "已有名为'" + self.profileString.get() + "'的档案。")
                 return
         if add:
             newProfile = copy.deepcopy(self.defaultProfile[0])
@@ -231,9 +231,9 @@ class Settings(FileSystemEventHandler):
     
     def deleteProfileWindow(self):
         if (self.allSettings[self.selectedIndex.get()]["profile"] == "Default"):
-            tk.messagebox.showerror("Error", "You can't delete the Default profile.")
+            tk.messagebox.showerror("错误", "不能删除Default配置。")
             return
-        okCancel = tk.messagebox.askokcancel("Continue?", "Are you sure you want to delete the current profile?")
+        okCancel = tk.messagebox.askokcancel("继续？", "你确定要删除当前配置吗？")
         if not okCancel:
             return
         self.allSettings.pop(self.selectedIndex.get())
